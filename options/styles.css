@@ -45,7 +45,7 @@ header .cart-content .cart-content__product {
   align-items: center;
   padding: 8px;
   border-radius: 8px;
-  background: rgb(129, 129, 129, 0.2);
+  background: rgba(226, 10, 10, 0.2);
   margin-bottom: 4px;
 }
 header .cart-content .cart-content__product.bg-gray {
