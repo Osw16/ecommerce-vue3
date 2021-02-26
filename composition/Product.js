@@ -20,7 +20,7 @@ app.component("product",{
     <p class="description__status" v-if="product.stock == 3">Quedan pocas unidades!</p>
     <p class="description__status" v-else-if="product.stock == 2">Quedan 2 unidades!</p>
     <p class="description__status" v-else-if="product.stock == 1">SE AGOTA!</p>
-    <p class="description__price">$ {{new Intl.NumberFormat("es-CO").format(product.price)}}</p>
+    <p class="description__price" :style="{color: price_color}">$ {{new Intl.NumberFormat("es-CO").format(product.price)}}</p>
     <p class="description__content">
 
     </p>
@@ -40,8 +40,19 @@ app.component("product",{
     emits:["sendtocart"],
     setup(props,context){
         const productState= reactive({
-            activeImage:0
+            activeImage:0,
+            price_color:computed(()=>props.product.stock <= 1 ? "rgb(188 30 67)" : "rgb(104, 104, 209)"
+            )
           });
+
+            filteredProducts = computed(() => {
+              if (filtro.value != "") {
+                return products.value.filter((product) =>
+                product.name.toUpperCase().includes(filtro.value.toUpperCase())
+                );
+              }
+                return products.value;
+              });
 
           function sendToCart(){
             context.emit("sendtocart",props.product);
@@ -54,6 +65,15 @@ app.component("product",{
               discountCodes.value.splice(discountCodeIndex,1);
             }
           }
+
+          watch(()=>productState.activeImage,(val, oldValue)=>{
+            console.log(val,oldValue)
+          });
+
+          // watch(()=>props.product.stock,stock=>{ 
+          //     if(stock<=1){productState.price_color = "rgb(188 30 67)"; }
+          //   }
+          // );
 
           return{
               ...toRefs(productState),
